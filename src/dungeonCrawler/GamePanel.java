@@ -1,23 +1,19 @@
-package main;
+package dungeonCrawler;
 
-import entity.Player;
+import dungeonCrawler.entity.Player;
 
+import javax.swing.*;
 import java.awt.*;
-import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements Runnable {
-    final int originalTileSize = 16;
-    final int scale = 3;
     public final int tileSize = 48;
-    final int maxScreenCol = 16;
-    final int maxScreenRow = 12;
     public final int screenWidth = 768;
     public final int screenHeight = 576;
-    KeyHandler keyH = new KeyHandler();
-    Thread gameThread;
-    Player player = new Player(this, keyH);
-
-    public int[][] mapTileData = {
+    final int originalTileSize = 16;
+    final int scale = 3;
+    final int maxScreenCol = 16;
+    final int maxScreenRow = 12;
+    public final int[][] mapTileData = {
             {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
             {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
             {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -31,6 +27,9 @@ public class GamePanel extends JPanel implements Runnable {
             {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
             {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
     };
+    final KeyHandler keyH = new KeyHandler();
+    Thread gameThread;
+    final Player player = new Player(this, keyH);
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));

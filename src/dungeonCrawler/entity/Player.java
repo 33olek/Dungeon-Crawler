@@ -1,7 +1,7 @@
-package entity;
+package dungeonCrawler.entity;
 
-import main.GamePanel;
-import main.KeyHandler;
+import dungeonCrawler.GamePanel;
+import dungeonCrawler.KeyHandler;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -9,8 +9,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Player extends Entity {
-    GamePanel gp;
-    KeyHandler keyH;
+    final GamePanel gp;
+    final KeyHandler keyH;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
@@ -47,25 +47,25 @@ public class Player extends Entity {
         if (keyH.upPressed) {
             direction = "up";
             int nextY = y - speed;
-            if (nextY >= 0 && !isWallTile(x, nextY, false)) {
+            if (nextY >= 0 && isntWallTile(x, nextY, false)) {
                 y = nextY;
             }
         } else if (keyH.downPressed) {
             direction = "down";
             int nextY = y + speed;
-            if (nextY < gp.screenHeight - gp.tileSize && !isWallTile(x, nextY, false)) {
+            if (nextY < gp.screenHeight - gp.tileSize && isntWallTile(x, nextY, false)) {
                 y = nextY;
             }
         } else if (keyH.leftPressed) {
             direction = "left";
             int nextX = x - speed;
-            if (nextX >= 0 && !isWallTile(nextX, y, true)) {
+            if (nextX >= 0 && isntWallTile(nextX, y, true)) {
                 x = nextX;
             }
         } else if (keyH.rightPressed) {
             direction = "right";
             int nextX = x + speed;
-            if (nextX < gp.screenWidth - gp.tileSize && !isWallTile(nextX, y, true)) {
+            if (nextX < gp.screenWidth - gp.tileSize && isntWallTile(nextX, y, true)) {
                 x = nextX;
             } else if (nextX >= gp.screenWidth - gp.tileSize) {
                 x = gp.screenWidth - gp.tileSize;
@@ -84,7 +84,7 @@ public class Player extends Entity {
         }
     }
 
-    private boolean isWallTile(int x, int y, boolean isHorizontal) {
+    private boolean isntWallTile(int x, int y, boolean isHorizontal) {
         int mapCol = x / gp.tileSize;
         int mapRow = y / gp.tileSize;
 
@@ -92,23 +92,23 @@ public class Player extends Entity {
             // Check for horizontal movement (left or right)
             if (x % gp.tileSize == 0) {
                 // Player is aligned to the tile grid
-                return gp.mapTileData[mapRow][mapCol] == 1;
+                return !(gp.mapTileData[mapRow][mapCol] == 1);
             } else {
                 // Check both tiles the player is intersecting
                 boolean tile1 = gp.mapTileData[mapRow][mapCol] == 1;
                 boolean tile2 = gp.mapTileData[mapRow][mapCol + 1] == 1;
-                return tile1 || tile2;
+                return !(tile1 || tile2);
             }
         } else {
             // Check for vertical movement (up or down)
             if (y % gp.tileSize == 0) {
                 // Player is aligned to the tile grid
-                return gp.mapTileData[mapRow][mapCol] == 1;
+                return !(gp.mapTileData[mapRow][mapCol] == 1);
             } else {
                 // Check both tiles the player is intersecting
                 boolean tile1 = gp.mapTileData[mapRow][mapCol] == 1;
                 boolean tile2 = gp.mapTileData[mapRow + 1][mapCol] == 1;
-                return tile1 || tile2;
+                return !(tile1 || tile2);
             }
         }
     }
