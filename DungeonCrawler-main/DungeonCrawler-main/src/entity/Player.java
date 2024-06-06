@@ -42,29 +42,33 @@ public class Player extends Entity {
     }
 
     public void update() {
+        boolean canMove = true;
+
         if (keyH.upPressed) {
             direction = "up";
             int nextY = y - speed;
-            if (nextY >= 0 && !isWallTile(x, nextY)) {
+            if (nextY >= 0 && !isWallTile(x, nextY, false)) {
                 y = nextY;
             }
         } else if (keyH.downPressed) {
             direction = "down";
             int nextY = y + speed;
-            if (nextY < gp.screenHeight - gp.tileSize && !isWallTile(x, nextY)) {
+            if (nextY < gp.screenHeight - gp.tileSize && !isWallTile(x, nextY, false)) {
                 y = nextY;
             }
         } else if (keyH.leftPressed) {
             direction = "left";
             int nextX = x - speed;
-            if (nextX >= 0 && !isWallTile(nextX, y)) {
+            if (nextX >= 0 && !isWallTile(nextX, y, true)) {
                 x = nextX;
             }
         } else if (keyH.rightPressed) {
             direction = "right";
             int nextX = x + speed;
-            if (nextX < gp.screenWidth - gp.tileSize && !isWallTile(nextX, y)) {
+            if (nextX < gp.screenWidth - gp.tileSize && !isWallTile(nextX, y, true)) {
                 x = nextX;
+            } else if (nextX >= gp.screenWidth - gp.tileSize) {
+                x = gp.screenWidth - gp.tileSize;
             }
         }
 
@@ -80,10 +84,33 @@ public class Player extends Entity {
         }
     }
 
-    private boolean isWallTile(int x, int y) {
+    private boolean isWallTile(int x, int y, boolean isHorizontal) {
         int mapCol = x / gp.tileSize;
         int mapRow = y / gp.tileSize;
-        return gp.mapTileData[mapRow][mapCol] == 1;
+
+        if (isHorizontal) {
+            // Check for horizontal movement (left or right)
+            if (x % gp.tileSize == 0) {
+                // Player is aligned to the tile grid
+                return gp.mapTileData[mapRow][mapCol] == 1;
+            } else {
+                // Check both tiles the player is intersecting
+                boolean tile1 = gp.mapTileData[mapRow][mapCol] == 1;
+                boolean tile2 = gp.mapTileData[mapRow][mapCol + 1] == 1;
+                return tile1 || tile2;
+            }
+        } else {
+            // Check for vertical movement (up or down)
+            if (y % gp.tileSize == 0) {
+                // Player is aligned to the tile grid
+                return gp.mapTileData[mapRow][mapCol] == 1;
+            } else {
+                // Check both tiles the player is intersecting
+                boolean tile1 = gp.mapTileData[mapRow][mapCol] == 1;
+                boolean tile2 = gp.mapTileData[mapRow + 1][mapCol] == 1;
+                return tile1 || tile2;
+            }
+        }
     }
 
     public void draw(Graphics2D g2) {
