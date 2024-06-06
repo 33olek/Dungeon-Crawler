@@ -68,13 +68,14 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
 
         // Draw walls
+        g2.setColor(Color.GRAY);
         for (int row = 0; row < mapTileData.length; row++) {
             for (int col = 0; col < mapTileData[row].length; col++) {
                 if (mapTileData[row][col] == 1) {
                     int x = col * tileSize;
                     int y = row * tileSize;
-                    g2.setColor(Color.GRAY);
-                    g2.fillRect(x, y, tileSize, tileSize);
+                    // Draw thin borders
+                    g2.drawRect(x, y, tileSize, tileSize);
                 }
             }
         }
